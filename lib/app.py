@@ -16,6 +16,11 @@ def fetch_github(user):
     req = requests.get(URL)
     return(req.json())
 
+def fetch_github_repo(user, repo):
+    ''' Call to GitHub API '''
+    URL = f'https://api.github.com/repos/{user}/{repo}'
+    req = requests.get(URL)
+    return(req.json())
 
 class CLI():
     ''' User interface '''
@@ -40,12 +45,26 @@ class CLI():
                 raise ValueError
             data_two = fetch_github(self._user_input)
             for x in data_two:
-                print(x["id"])
-            self.get_user_choice()
+                print(f'{x["name"]}')
+            self.get_repo_choice(self._user_input)
         except ValueError:
             print(f'{Format.RED}Sorry,that is not a valid input.{Format.CLEAR}\n')
             self.menu()
 
+    def get_repo_choice(self, user):
+        try:
+            self._user_input = input(
+                f'''\n{Format.BLUE}Please enter a repo name\n{Format.CLEAR}''')
+            if self._user_input == 'exit':
+                return self.goodbye()
+            if not self.valid_input(self._user_input):
+                raise ValueError
+            data_three = fetch_github_repo(user, self._user_input)
+            print(data_three)
+            self.get_repo_choice(user)
+        except ValueError:
+            print(f'{Format.RED}Sorry,that is not a valid input.{Format.CLEAR}\n')
+            self.menu()
        
 
     def show_house(self):
