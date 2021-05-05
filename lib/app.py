@@ -1,5 +1,6 @@
 import requests
 
+
 class Format():
     ''' ASCI codes for formatting '''
     BLUE = '\033[94m'
@@ -8,15 +9,17 @@ class Format():
     BOLD = '\033[1m'
     CLEAR = '\033[0m'
 
+
 def fetch_github(user):
     ''' Call to GitHub API '''
     URL = f'https://api.github.com/users/{user}/repos'
     req = requests.get(URL)
-    for data in req.json():
-        return data
+    return(req.json())
+
 
 class CLI():
     ''' User interface '''
+
     def __init__(self):
         self._user_input = ""
 
@@ -29,17 +32,21 @@ class CLI():
 
     def get_user_choice(self):
         try:
-            self._user_input = input(f'''\n{Format.BLUE}Please enter a github username\n{Format.CLEAR}''')
+            self._user_input = input(
+                f'''\n{Format.BLUE}Please enter a github username\n{Format.CLEAR}''')
             if self._user_input == 'exit':
                 return self.goodbye()
             if not self.valid_input(self._user_input):
                 raise ValueError
             data_two = fetch_github(self._user_input)
-            print(data_two)
+            for x in data_two:
+                print(x["id"])
             self.get_user_choice()
         except ValueError:
             print(f'{Format.RED}Sorry,that is not a valid input.{Format.CLEAR}\n')
             self.menu()
+
+       
 
     def show_house(self):
         print(f'\tHello!')
@@ -47,7 +54,6 @@ class CLI():
     @staticmethod
     def valid_input(i):
         return True
-
     @staticmethod
     def goodbye():
         print(f'\n{Format.BLUE}{Format.BOLD}Goodbye!{Format.CLEAR}\n')
