@@ -1,3 +1,5 @@
+import requests
+
 class Format():
     ''' ASCI codes for formatting '''
     BLUE = '\033[94m'
@@ -5,6 +7,13 @@ class Format():
     RED = '\033[91m'
     BOLD = '\033[1m'
     CLEAR = '\033[0m'
+
+def fetch_github(user):
+    ''' Call to GitHub API '''
+    URL = f'https://api.github.com/users/{user}/repos'
+    req = requests.get(URL)
+    for data in req.json():
+        return data
 
 class CLI():
     ''' User interface '''
@@ -16,8 +25,6 @@ class CLI():
         self.menu()
 
     def menu(self):
-        for idx, item in enumerate(["one","two","three"], start=1):
-            print(f'{idx}. {item}')
         self.get_user_choice()
 
     def get_user_choice(self):
@@ -27,7 +34,8 @@ class CLI():
                 return self.goodbye()
             if not self.valid_input(self._user_input):
                 raise ValueError
-            self.show_house()
+            data_two = fetch_github(self._user_input)
+            print(data_two)
             self.get_user_choice()
         except ValueError:
             print(f'{Format.RED}Sorry,that is not a valid input.{Format.CLEAR}\n')
@@ -38,7 +46,7 @@ class CLI():
 
     @staticmethod
     def valid_input(i):
-        return int(i) > 0 and int(i) <= 3
+        return True
 
     @staticmethod
     def goodbye():
