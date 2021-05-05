@@ -54,9 +54,11 @@ class CLI():
     def get_repo_choice(self, user):
         try:
             self._user_input = input(
-                f'''\n{Format.BLUE}Please enter a repo name\n{Format.CLEAR}''')
+                f'''\n{Format.BLUE}Please enter a repo name (or go 'back')\n{Format.CLEAR}''')
             if self._user_input == 'exit':
                 return self.goodbye()
+            if self._user_input == 'back':
+                self.menu()          
             if not self.valid_input(self._user_input):
                 raise ValueError
             data_three = fetch_github_repo(user, self._user_input)
