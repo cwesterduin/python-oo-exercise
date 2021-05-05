@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+requests = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-cov = "*"
+
+[requires]
+python_version = "3.10"
+
+[scripts]
+start = "python main.py"
+test = "pytest ."
+coverage = "pytest --cov-report term-missing --cov=."
